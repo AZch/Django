@@ -1,5 +1,6 @@
+{% extends "base.twig" %}
 
-
+{% block content %}
 <div class="modal-header">
     <h5 class="modal-title">
         {% if not edit %}Добавление свалки{% else %}Редактировать свалку{% endif %}
@@ -66,3 +67,5 @@
         изменения{% endif %}</button>
     </form>
 </div>
+
+{% endblock %}

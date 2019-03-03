@@ -26,7 +26,8 @@
 	    
 	    
 		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-				<img src="{{STATIC_URL}}trash.png" class="navbar-brand" alt="Navbar">
+                {% load static %}
+				<img src="{% static "trash.png"%}" class="navbar-brand" alt="Navbar">
 				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
 				  <span class="navbar-toggler-icon"></span>
 				</button>

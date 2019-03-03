@@ -25,15 +25,18 @@ def loadPhotosExt(photoLoc, ext):
 
 def getPhotos(photoLocation):
     images = []
-    images.append(loadPhotosExt(photoLocation, 'jpg'))
-    images.append(loadPhotosExt(photoLocation, 'png'))
-    images.append(loadPhotosExt(photoLocation, 'jpeg'))
+    images.extend(loadPhotosExt(photoLocation, 'jpg'))
+    images.extend(loadPhotosExt(photoLocation, 'png'))
+    images.extend(loadPhotosExt(photoLocation, 'jpeg'))
+    return images
 
 
 def renderIndex(request, admin):
     landfill = Landfill.objects.all() # Landfill.objects.all().order_by('name')
-    #for i in range(len(landfill)):
-     #   landfill[i].photolocation = getPhotos(landfill[i].photoLocation)
+    for lf in landfill:
+        lf.photolocation = getPhotos(lf.photolocation)
+        lf.datefind = str(lf.datefind)
+        lf.datestatement = str(lf.datestatement)
 
     context = {
         'landfill': landfill,
@@ -61,7 +64,7 @@ def landfillOpen(request, id):
     except Exception:
         return HttpResponse('Свалка с id = ' + str(id) + ' не найдена, сообщите администратору')
 
-    #info.photolocation = getPhotos(info.photolocation)
+    info.photolocation = getPhotos(info.photolocation)
     vols = Volunteers.objects.filter(idlandfillvolunt=id)
     events = Events.objects.filter(idlandfillevent=id)
 
@@ -131,7 +134,8 @@ def landfillPost(request, id):
             {'result': 'Error', 'message': 'Ссылка с фотографиями на свалку не может оставаться пустым'})
 
     landfill.save()
-    return JsonResponse({'result': 'OK'})
+    #return JsonResponse({'result': 'OK'})
+    return renderIndex(request, True)
 
 
 
@@ -148,7 +152,7 @@ def landfill(request, id):
 @require_http_methods(["POST", "DELETE"])
 def landfillDel(request, id):
     Landfill.objects.filter(id=id).delete()
-    return HttpResponse('')
+    return renderIndex(request, True)
 
 
 

@@ -24,6 +24,7 @@ urlpatterns = [
     path('landfill', views.landfillAdd),
     path('landfill/<int:id>', views.landfill),
     path('landfillDel/<int:id>', views.landfillDel),
+    path('landfill/landfillDel/<int:id>', views.landfillDel),
     path('form', views.formAdd),
     path('form/<int:id>', views.formEdit)
 ]
