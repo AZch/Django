@@ -1,0 +1,145 @@
+<!doctype html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<!-- Required meta tags -->
+    	<meta charset="utf-8">
+   		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+   		<!-- Bootstrap CSS -->
+			<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="	sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+			<script src="https://unpkg.com/gijgo@1.9.11/js/gijgo.min.js" type="text/javascript"></script>
+			<link href="https://unpkg.com/gijgo@1.9.11/css/gijgo.min.css" rel="stylesheet" type="text/css" />
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+	    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+
+
+		<title>
+			Свалка не круто
+		</title>
+
+	</head>
+	<body>
+	    <!-- Optional JavaScript -->
+	    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+	    
+	    
+		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+				<img src="{{STATIC_URL}}trash.png" class="navbar-brand" alt="Navbar">
+				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+				  <span class="navbar-toggler-icon"></span>
+				</button>
+				<div class="collapse navbar-collapse" id="navbarNavDropdown">
+				  <ul class="navbar-nav">
+					<li class="nav-item active">
+					  <a class="nav-link" href="/">Главная <span class="sr-only">(current)</span></a>
+					</li>
+					<li class="nav-item">
+					  <a class="nav-link" href="/">Волонтерства</a>
+					</li>
+					<li class="nav-item">
+					  <a class="nav-link" href="/">События свалок</a>
+					</li>
+                    <li class="nav-item">
+                        <a class="nav-link{% if admin %} active {% endif %}" href="/admin">Редактирование</a>
+                    </li>
+                    {% if admin %}
+						<form action="form" method="get">
+                            <a class="btn btn-primary btn-sm btn-menu admin" href="/form" data-target="#formModal" data-toggle="modal" >Добавить свалку</a>
+                            </form>
+
+						{#<form action="/form" method="post">#}
+					    {#<button type="button" class="btn btn-primary btn-sm btn-menu admin" >Добавить свалку</button>#}
+							{#</form>#}
+                    {% endif %}
+				  </ul>
+				</div>
+		</nav>
+		<!-- Modal -->
+		{% if admin %}
+		<div class="modal fade" id="formModal" tabindex="-1" role="dialog" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+				<div class="modal-content" id="modal-content">
+
+
+<div class="modal-header">
+    <h5 class="modal-title">
+        {% if not edit %}Добавление свалки{% else %}Редактировать свалку{% endif %}
+    </h5>
+</div>
+
+<div class="modal-body">
+    <form id="form" action="{% if not edit %}/landfill{% else %}/landfill/{{ info.id }}{% endif %}" method="post" enctype="multipart/form-data"> {% csrf_token %}
+            <div class="form-group">
+                <label for="nameDump">Название свалки</label>
+                <input type="text" class="form-control" name="nameDump" placeholder="Большая свалка"
+                    {% if edit %} value="{{ info.name }}" {% endif %} />
+            </div>
+            <div class="form-group">
+                <label for="location">Местоположение свалки</label>
+                <input type="text" class="form-control" name="location" placeholder="Большая свалка"
+                    {% if edit %} value="{{ info.location }}" {% endif %} />
+            </div>
+
+
+
+            <div class="form-group">
+                <label for="nameDump">Дата обнаружения свалки</label>
+                <input id="datefind" width="276" name="datefind"
+                    {% if edit %} value= "{{ info.datefind }}" {% endif %} />
+                <script>
+                        $('#datefind').datepicker({
+                            format: 'yyyy-mm-dd',
+                            uiLibrary: 'bootstrap4'
+                        });
+                </script>
+            </div>
+            <div class="form-group">
+                <label for="nameDump">Дата подачи заявления</label>
+                <input id="datestatement" width="276" name="datestatement"
+                    {% if edit %} value="{{ info.datestatement }}" {% endif %} />
+                <script>
+                        $('#datestatement').datepicker({
+                            format: 'yyyy-mm-dd',
+                            uiLibrary: 'bootstrap4'
+                        });
+                </script>
+            </div>
+
+
+                <hr/>
+                <div class="form-group" style="margin-bottom:0;">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Папка с фото</span>
+                        </div>
+                        <input type="text" class="form-control" name="photolocation" placeholder="Большая свалка"
+                            {% if edit %} value="{{ info.photolocation }}" {% endif %} />
+
+                    </div>
+
+            </div>
+
+    <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+
+
+    <button method="post"  class="btn btn-primary"
+        >{% if not edit %}Добавить{% else %}Сохранить
+        изменения{% endif %}</button>
+    </form>
+</div>
+
+				</div>
+			</div>
+		</div>
+		{% endif %}
+
+        <main role="main">
+            <div class="jumbotron">
+                {% block content %}{% endblock %}
+            </div>
+        </main>
+				
+	</body>
+</html>

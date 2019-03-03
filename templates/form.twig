@@ -1,0 +1,68 @@
+
+
+<div class="modal-header">
+    <h5 class="modal-title">
+        {% if not edit %}Добавление свалки{% else %}Редактировать свалку{% endif %}
+    </h5>
+</div>
+
+<div class="modal-body">
+    <form id="form" action="{% if not edit %}/landfill{% else %}/landfill/{{ info.id }}{% endif %}" method="post" enctype="multipart/form-data"> {% csrf_token %}
+            <div class="form-group">
+                <label for="nameDump">Название свалки</label>
+                <input type="text" class="form-control" name="nameDump" placeholder="Большая свалка" 
+                    {% if edit %} value="{{ info.name }}" {% endif %} />
+            </div>
+            <div class="form-group">
+                <label for="location">Местоположение свалки</label>
+                <input type="text" class="form-control" name="location" placeholder="Большая свалка" 
+                    {% if edit %} value="{{ info.location }}" {% endif %} />
+            </div>
+
+
+
+            <div class="form-group">
+                <label for="nameDump">Дата обнаружения свалки</label>
+                <input id="datefind" width="276" name="datefind"
+                    {% if edit %} value= "{{ info.datefind }}" {% endif %} />
+                <script>
+                        $('#datefind').datepicker({
+                            format: 'yyyy-mm-dd',
+                            uiLibrary: 'bootstrap4'
+                        });
+                </script>
+            </div>
+            <div class="form-group">
+                <label for="nameDump">Дата подачи заявления</label>
+                <input id="datestatement" width="276" name="datestatement"
+                    {% if edit %} value="{{ info.datestatement }}" {% endif %} />
+                <script>
+                        $('#datestatement').datepicker({
+                            format: 'yyyy-mm-dd',
+                            uiLibrary: 'bootstrap4'
+                        });
+                </script>
+            </div>
+            
+                
+                <hr/>
+                <div class="form-group" style="margin-bottom:0;">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Папка с фото</span>
+                        </div>
+                        <input type="text" class="form-control" name="photolocation" placeholder="Большая свалка"
+                            {% if edit %} value="{{ info.photolocation }}" {% endif %} />
+
+                    </div>
+
+            </div>
+
+    <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+
+
+    <button method="post"  class="btn btn-primary"
+        >{% if not edit %}Добавить{% else %}Сохранить
+        изменения{% endif %}</button>
+    </form>
+</div>
